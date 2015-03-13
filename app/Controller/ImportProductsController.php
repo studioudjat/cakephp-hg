@@ -184,6 +184,18 @@ class ImportProductsController extends AppController {
     	$material = $this->_translateJP($this->_mergeCells($objSheet, $dataMap[$index]["material"], ' '));
     	//$material = $this->_mergeCells($objSheet, $dataMap[$index]["material"], ' ');
     	
+    	// 素材が複数のセルから取得されて、カンマ区切りで代入されているのでループ処理で文字列を一つ一つチェック
+    	$materials = explode(',', $material);
+    	for ($k = 0; $k < count($materials); $k++) {
+    	  if (preg_match('/.* *-*\d+% \w+/', $materials[$k], $matches)) {
+    	    // ひっくり返った文字列を修正 例： -100% cotton -> cotton 100%
+    	    $materials[$k] = preg_replace('/(.*) (-*\d+%) (\w+)/', '${1} ${3} ${2}', $matches[0]);
+    	    $materials[$k] = preg_replace('/(-*\d+%) (\w+)/', '${2} ${1}', $matches[0]);
+    	  }
+    	}
+    	// チェック後、カンマ区切りで結合
+    	$material = implode(',', $materials);
+    	
     	// 各色の前に、アルファベット文字列を追加　例：White -> A: White
     	$color = $this->_mergeCells($objSheet, $dataMap[$index]["color"], ',');
     	$colors = explode(',', $color);
