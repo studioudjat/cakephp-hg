@@ -195,7 +195,7 @@ class ImportProductsController extends AppController {
     	$data['Product'][$row] = array (
     	  // 最後の一文字を削除
     	  'style_no' => $products[$j]['style_no'],
-    	  'style_name' => $this->_translateJP($this->_mergeCells($objSheet, $dataMap[$index]["style_name"], ' ')),
+    	  'style_name' => strtoupper($this->_translateJP($this->_mergeCells($objSheet, $dataMap[$index]["style_name"], ' '))),
     	  //'style_name' => $this->_mergeCells($objSheet, $dataMap[$index]["style_name"], ' '),
     	  'del_date' => "{$del_date[0]} {$del_date[1]}", 
     	  'price' => $price,
